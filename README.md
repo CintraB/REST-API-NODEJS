@@ -34,6 +34,7 @@ O servidor estará acessível em http://localhost:3000.
 
   - **Livros**
     - GET /livros: Obtém todos os livros.
+    - GET /livros/busca: Obtém todos os livros de uma determinada editora.
     - GET /livros/:id: Obtém um livro específico pelo ID.
     - POST /livros: Cria um novo livro.
     - PUT /livros/:id: Atualiza um livro existente pelo ID.
