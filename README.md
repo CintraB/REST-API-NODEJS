@@ -8,37 +8,37 @@ Antes de executar o aplicativo, é necessário configurar as variáveis de ambie
 
 ```plaintext
 DB_CONNECTION_STRING=sua_string_de_conexão_com_o_banco_de_dados_mongodb
-
+```
 ## Instalação
 
 Clone o repositório:
 
 ```plaintext
 git clone https://github.com/CintraB/REST-API-NODEJS
-
+```
 Instale as dependências:
 
 ```plaintext
 npm install
-
+```
 ## Execução
 
 Execute o comando
 
 ```plaintext
 npm run dev
-
+```
 O servidor estará acessível em http://localhost:3000.
 
 ### Endpoints
-####Livros
+###Livros
 GET /livros: Obtém todos os livros.
 GET /livros/:id: Obtém um livro específico pelo ID.
 POST /livros: Cria um novo livro.
 PUT /livros/:id: Atualiza um livro existente pelo ID.
 DELETE /livros/:id: Exclui um livro pelo ID.
 
-####Autores
+###Autores
 GET /autores: Obtém todos os autores.
 GET /autores/:id: Obtém um autor específico pelo ID.
 POST /autores: Cria um novo autor.
