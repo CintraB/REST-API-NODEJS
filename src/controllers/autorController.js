@@ -6,7 +6,11 @@ class AutorController{
 
     try {
       const listaAutores = await autor.find({}); //procura por tudo na colecao de livros
-      res.status(200).json(listaAutores);
+      if(listaAutores !== null){
+        res.status(200).json(listaAutores);
+      }else{
+        res.status(404).json({message: "Nenhum autor cadastrado."});
+      }
     } catch (error) {
       //res.status(500).json({message: `${error.message} - falha na requisição`});
       next(error);
@@ -40,7 +44,6 @@ class AutorController{
   }
 
   static async atualizarAutor(req,res,next){
-
     try {
       const id = req.params.id;
       await autor.findByIdAndUpdate(id,req.body); //procura pelo ID do autor e atualiza

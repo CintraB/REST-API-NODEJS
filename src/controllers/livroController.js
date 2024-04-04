@@ -7,7 +7,12 @@ class LivroController{
 
     try {
       const listaLivros = await livro.find({}); //procura por tudo na colecao de livros
-      res.status(200).json(listaLivros);
+      if(listaLivros !== null){
+        res.status(200).json(listaLivros);
+      }else{
+        res.status(404).json({message: "Nenhum livro cadastrado."});
+      }
+
     } catch (error) {
       //res.status(500).json({message: `${error.message} - falha na requisição`});
       next(error);
@@ -33,7 +38,11 @@ class LivroController{
     try {
       const id = req.params.id;
       const livroEncontrado = await livro.findById(id); //procura pelo ID do livro
-      res.status(200).json(livroEncontrado);
+      if(livroEncontrado !== null){
+        res.status(200).json(livroEncontrado);
+      }else{
+        res.status(404).json({message: "ID do livro não encontrado."});
+      }
     } catch (error) {
       //res.status(500).json({message: `${error.message} - falha na requisição do livro`});
       next(error);
@@ -68,7 +77,11 @@ class LivroController{
     const editora = req.query.editora;
     try {
       const livrosPorEditora = await livro.find({ editora: editora}); //propriedade: const
-      res.status(200).json(livrosPorEditora);
+      if(livrosPorEditora !== null){
+        res.status(200).json(livrosPorEditora);
+      }else{
+        res.status(404).json({message: "Nenhum livro encontrado."});
+      }
     } catch (error) {
       //res.status(500).json({message: `${error.message} - falha na busca`});
       next(error);
