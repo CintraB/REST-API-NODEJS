@@ -2,13 +2,6 @@
 
 Esta é uma aplicação de API RESTful em Node.js que utiliza Express e MongoDB para gerenciar uma coleção de livros.
 
-## Configuração
-
-Antes de executar o aplicativo, é necessário configurar as variáveis de ambiente no arquivo `.env`.
-
-```plaintext
-DB_CONNECTION_STRING=sua_string_de_conexão_com_o_banco_de_dados_mongodb
-```
 ## Instalação
 
 Clone o repositório:
@@ -21,6 +14,15 @@ Instale as dependências:
 ```plaintext
 npm install
 ```
+
+## Configuração
+
+Antes de executar o aplicativo, é necessário configurar as variáveis de ambiente no arquivo `.env`.
+
+```plaintext
+DB_CONNECTION_STRING=sua_string_de_conexão_com_o_banco_de_dados_mongodb
+```
+
 ## Execução
 
 Execute o comando
