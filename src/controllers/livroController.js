@@ -1,5 +1,6 @@
 import livro from "../models/Livro.js";
 import { autor } from "../models/Autor.js";
+import naoEncontrado from "../erros/naoEncontrado.js";
 
 class LivroController{
 
@@ -10,11 +11,9 @@ class LivroController{
       if(listaLivros !== null){
         res.status(200).json(listaLivros);
       }else{
-        res.status(404).json({message: "Nenhum livro cadastrado."});
+        next(new naoEncontrado("Nenhum livro cadastrado foi encontrado."));
       }
-
     } catch (error) {
-      //res.status(500).json({message: `${error.message} - falha na requisição`});
       next(error);
     }
   }
@@ -27,7 +26,6 @@ class LivroController{
       const livroCriado = await livro.create(livroCompleto); //criar o objeto
       res.status(201).json({message: "criado com sucesso", livro: livroCriado});
     }catch(error){
-      //res.status(500).json({message: `${error.message} - falha ao cadastrar livro`});
       next(error);
     }
         
@@ -41,10 +39,9 @@ class LivroController{
       if(livroEncontrado !== null){
         res.status(200).json(livroEncontrado);
       }else{
-        res.status(404).json({message: "ID do livro não encontrado."});
+        next(new naoEncontrado("ID do livro não encontrado."));
       }
     } catch (error) {
-      //res.status(500).json({message: `${error.message} - falha na requisição do livro`});
       next(error);
     }
   }
@@ -53,10 +50,14 @@ class LivroController{
 
     try {
       const id = req.params.id;
-      await livro.findByIdAndUpdate(id,req.body); //procura pelo ID do livro e atualiza
-      res.status(200).json({message: "livro atualizado"});
+      const livroAtualizado = await livro.findByIdAndUpdate(id,req.body); //procura pelo ID do livro e atualiza
+
+      if(livroAtualizado !== null){
+        res.status(200).json({message: "livro atualizado"});
+      }else{
+        next(new naoEncontrado("ID do livro não encontrado."));
+      }
     } catch (error) {
-      //res.status(500).json({message: `${error.message} - falha na atualização do livro`});
       next(error);
     }
   }
@@ -65,10 +66,14 @@ class LivroController{
 
     try {
       const id = req.params.id;
-      await livro.findByIdAndDelete(id); //procura pelo ID do livro e deleta
-      res.status(200).json({message: "livro deletado com sucesso"});
+      const livroExcluir = await livro.findByIdAndDelete(id); //procura pelo ID do livro e deleta
+      
+      if(livroExcluir !== null){
+        res.status(200).json({message: "livro deletado com sucesso"});
+      }else{
+        next(new naoEncontrado("ID do livro não encontrado."));
+      }
     } catch (error) {
-      //res.status(500).json({message: `${error.message} - falha ao deletar o livro`});
       next(error);
     }
   }
@@ -77,13 +82,13 @@ class LivroController{
     const editora = req.query.editora;
     try {
       const livrosPorEditora = await livro.find({ editora: editora}); //propriedade: const
-      if(livrosPorEditora !== null){
+      console.log(livrosPorEditora);
+      if(livrosPorEditora.length > 0){ //o retorno da função find array vazio [] e não null, assim verificando o tamanho do array.
         res.status(200).json(livrosPorEditora);
       }else{
-        res.status(404).json({message: "Nenhum livro encontrado."});
+        next(new naoEncontrado("Nenhum livro encontrado."));
       }
     } catch (error) {
-      //res.status(500).json({message: `${error.message} - falha na busca`});
       next(error);
     }
   }
