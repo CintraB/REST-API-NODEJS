@@ -1,8 +1,8 @@
 import erroBase from "./erroBase.js";
 
 class naoEncontrado extends erroBase{
-  constructor(){
-    super("Página não encontrada.",404);
+  constructor(mensagem = "Página não encontrada."){
+    super(mensagem,404);
   }
 }
 
