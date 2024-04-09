@@ -78,11 +78,15 @@ class LivroController{
     }
   }
 
-  static async listarLivroPorEditora (req,res,next){
-    const editora = req.query.editora;
+  static async listarLivroPorFiltro (req,res,next){
+    const {editora, titulo} = req.query;
+
+    const busca = {};
+    if(editora) busca.editora= editora;
+    if(titulo) busca.titulo = titulo;       //buscando de forma dinamica colocando as buscas na variavel "busca"
+    console.log(busca);
     try {
-      const livrosPorEditora = await livro.find({ editora: editora}); //propriedade: const
-      console.log(livrosPorEditora);
+      const livrosPorEditora = await livro.find(busca); //propriedade: const
       if(livrosPorEditora.length > 0){ //o retorno da função find array vazio [] e não null, assim verificando o tamanho do array.
         res.status(200).json(livrosPorEditora);
       }else{
