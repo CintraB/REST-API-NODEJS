@@ -2,6 +2,7 @@ import { livro } from "../models/index.js";
 import { autor } from "../models/index.js";
 import naoEncontrado from "../erros/naoEncontrado.js";
 
+
 class LivroController{
 
   static async listarLivros(req,res,next){
@@ -79,16 +80,16 @@ class LivroController{
   }
 
   static async listarLivroPorFiltro (req,res,next){
-    const {editora, titulo} = req.query;
+    
+    //const regex = new RegExp(titulo,"i"); //buscar por titulo não dependendo de A ou a 
 
-    const busca = {};
-    if(editora) busca.editora= editora;
-    if(titulo) busca.titulo = titulo;       //buscando de forma dinamica colocando as buscas na variavel "busca"
-    console.log(busca);
+  
+    const busca = await processaBusca(req.query);
+
     try {
-      const livrosPorEditora = await livro.find(busca); //propriedade: const
-      if(livrosPorEditora.length > 0){ //o retorno da função find array vazio [] e não null, assim verificando o tamanho do array.
-        res.status(200).json(livrosPorEditora);
+      const livrosBusca = await livro.find(busca); //propriedade: const
+      if(livrosBusca.length > 0){ //o retorno da função find array vazio [] e não null, assim verificando o tamanho do array.
+        res.status(200).json(livrosBusca);
       }else{
         next(new naoEncontrado("Nenhum livro encontrado."));
       }
@@ -98,6 +99,35 @@ class LivroController{
   }
 
 
+
+}
+
+async function processaBusca(parametros){
+
+  const {editora, titulo, minPaginas, maxPaginas, nomeAutor} = parametros;
+
+  const busca = {};
+
+  if(editora) busca.editora = editora;
+  if(titulo) busca.titulo = { $regex: titulo, $options: "i"}; //buscando de forma dinamica colocando as buscas na variavel "busca", usando operadores do mongoDB
+
+
+  if(minPaginas || maxPaginas){
+    busca.paginas = {};
+  }
+
+  //gte = maior ou igual que
+  if(minPaginas) busca.paginas.$gte = minPaginas;
+  //lte = menor ou igual que
+  if(maxPaginas) busca.paginas.$lte = maxPaginas;
+
+
+  if(nomeAutor){
+    const autorEncontrado = await autor.findOne({nome: nomeAutor});
+    busca.autor = autorEncontrado;
+  }
+   
+  return busca;
 
 }
 
